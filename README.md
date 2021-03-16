@@ -1,8 +1,8 @@
-# TL;DR
+# 🎨 TL;DR
 
 TL;DR (Too long didn't read) is a service to summarize text with a given website.
 
-## Installation
+## 📌 Installation
 
 Install requirements in `requirements.txt` with pip
 
@@ -16,7 +16,7 @@ Then load up your favorite python IDE and run `main.py`, or use your terminal
 python main.py
 ```
 
-## Usage
+## 📝 Usage
 
 Send a `POST` request to the local flask application in page `/sum` with the following:
 ```
@@ -26,7 +26,7 @@ sentences=5
 cached=true
 ```
 
-## More Information
+## 🔖 More Information
 
 `site-language` is the language the selected website uses, changing this to another language may mess up the summarization.
 
