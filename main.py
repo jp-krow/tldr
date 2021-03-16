@@ -29,26 +29,26 @@ app = Flask(__name__)
 @app.route("/sum", methods=["POST"])
 def summerize():
   if request.method == "POST":
-    
     try:
+      
       LANGUAGE = request.form.get('site-language')
 
-      #sentences parameter optional, defaults to 10
+      # Sentences parameter optional, defaults to 10
       if request.form.get("sentences",None) == None:
         SENTENCES_COUNT = 10
       else:
         SENTENCES_COUNT = int(request.form.get('sentences'))
 
-      #optional google cashed parameter, helps avoid anti-bot pages
+      # Optional google cached parameter, helps avoid anti-bot pages
       if request.form.get("cached", None).lower() == "true":
         url = "http://webcache.googleusercontent.com/search?q=cache:" + request.form.get('url')
       elif request.form.get("cached", None) == None or request.form.get("cached", None).lower() == "false":
         url = request.form.get('url')
 
-      #try:
-      parser = HtmlParser.from_url(url, Tokenizer(LANGUAGE))
-      #except:
-        #return errorMsg, 400
+      try:
+        parser = HtmlParser.from_url(url, Tokenizer(LANGUAGE))
+      except:
+        return "URL provided is not valid (or cant reach)", 400
       # or for plain text files
       # parser = PlaintextParser.from_file("document.txt", Tokenizer(LANGUAGE))
       stemmer = Stemmer(LANGUAGE)
