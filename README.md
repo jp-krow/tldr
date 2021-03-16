@@ -10,7 +10,7 @@ Install requirements in `requirements.txt` with pip
 pip install -r requirements.txt
 ```
 
-Then load up your favorite python IDE and run `main.py`, or use your terminal
+Then load up your favorite python IDE and run `main.py` or use your terminal
 
 ```bash
 python main.py
@@ -19,6 +19,9 @@ python main.py
 ## 📝 Usage
 
 Send a `POST` request to the local flask application in page `/sum` with the following:
+
+`Content-Type: application/x-www-form-urlencoded`
+
 ```
 site-language=english
 url=[your url here]
