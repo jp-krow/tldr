@@ -9,6 +9,8 @@ from sumy.nlp.stemmers import Stemmer
 from sumy.utils import get_stop_words
 from flask import Flask, request, jsonify
 
+
+# Default error message
 errorMsg = """
       <p>Couldn't complete request.</p>\n
       \n
@@ -28,7 +30,21 @@ errorMsg = """
 app = Flask(__name__)
 @app.route("/sum", methods=["POST"])
 def summerize():
+
+  # Non-Post method error
+  if request.method != "POST":
+    return "Only accepting POST method", 400
+
+  # Checking for POST method
   if request.method == "POST":
+
+    # Checking for parameters, see if they are filled in.
+    if request.form.get('site-language', None) is None or str(request.form.get('site-language')) == '':
+      return "site-language parameter returned null. Make sure it is are filled in.", 400
+
+    elif request.form.get('url', None) is None or str(request.form.get('url')) == '':
+      return "url parameter returned null. Make sure it is filled in.", 400
+
     try:
 
       LANGUAGE = request.form.get('site-language')
@@ -41,10 +57,13 @@ def summerize():
 
       # Optional google cached parameter, helps avoid anti-bot pages
       if str(request.form.get('cached')).lower() == "true" and request.form.get('cached', None) != None:
+
         url = "http://webcache.googleusercontent.com/search?q=cache:" + str(request.form.get('url'))
+
       else:
         url = str(request.form.get('url'))
         
+      # Testing for valid URL / Checking if bot can access it
       try:
         parser = HtmlParser.from_url(url, Tokenizer(LANGUAGE))
       except:
@@ -70,8 +89,9 @@ def summerize():
       while True:
         if fax == True:
           return jsonify(str(sums)), 200
+
     except Exception as e:
-      return errorMsg + str(e), 400
+      return errorMsg + " Error: " + str(e), 400
 
 @app.route("/")
 def index():
@@ -79,9 +99,13 @@ def index():
 
 
 if __name__ == "__main__":
+
+  # Installing punkt
   import os
   os.system("""python -c "import nltk; nltk.download('punkt')"
   """)
+
+  # Starting local server
   app.run(
   threaded = True,
   host="0.0.0.0"
