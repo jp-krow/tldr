@@ -39,18 +39,17 @@ def summerize():
       else:
         SENTENCES_COUNT = int(request.form.get('sentences'))
 
-      url = request.form.get('url')
+      url = str(request.form.get('url'))
 
       # Optional google cached parameter, helps avoid anti-bot pages
-      if request.form.get('cached', None).lower() == "true" and request.form.get('cached', None) != None:
-        url = "http://webcache.googleusercontent.com/search?q=cache:" + request.form.get('url')
-      else:
-        url = request.form.get('url')
-
+      if str(request.form.get('cached', None)).lower() == "true" and request.form.get('cached', None) != None:
+        url = "http://webcache.googleusercontent.com/search?q=cache:" + str(request.form.get('url'))
+        
       try:
         parser = HtmlParser.from_url(url, Tokenizer(LANGUAGE))
       except:
         return "URL provided is not valid (or cant reach) try enabling cached.", 400
+        
       # or for plain text files
       # parser = PlaintextParser.from_file("document.txt", Tokenizer(LANGUAGE))
       stemmer = Stemmer(LANGUAGE)
@@ -71,8 +70,9 @@ def summerize():
       while True:
         if fax == True:
           return jsonify(str(sums)), 200
-    except:
-      return errorMsg, 400
+    except Exception as e:
+      return errorMsg + str(e), 400
+
 @app.route("/")
 def index():
   return "Use a POST on /sum to summerize text."
