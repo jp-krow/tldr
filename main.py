@@ -39,16 +39,16 @@ def summerize():
       else:
         SENTENCES_COUNT = int(request.form.get('sentences'))
 
-      url = str(request.form.get('url'))
-
       # Optional google cached parameter, helps avoid anti-bot pages
-      if str(request.form.get('cached', None)).lower() == "true" and request.form.get('cached', None) != None:
+      if str(request.form.get('cached')).lower() == "true" and request.form.get('cached', None) != None:
         url = "http://webcache.googleusercontent.com/search?q=cache:" + str(request.form.get('url'))
+      else:
+        url = str(request.form.get('url'))
         
       try:
         parser = HtmlParser.from_url(url, Tokenizer(LANGUAGE))
       except:
-        return "URL provided is not valid (or cant reach) try enabling cached.", 400
+        return "URL provided is not valid (or cant reach) try enabling cached. " + url, 400
         
       # or for plain text files
       # parser = PlaintextParser.from_file("document.txt", Tokenizer(LANGUAGE))
